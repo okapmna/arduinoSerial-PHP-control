@@ -6,10 +6,10 @@
     var_dump($aksi);
 
     if($aksi == "1"){
-        $respon = kirimPerintahArduino("/dev/ttyUSB0", $aksi);
+        $respon = kirimPerintahArduino("PORT", $aksi); // Arahkan ke port arduino
         echo "hello".$respon;
     }else{
-        $respon = kirimPerintahArduino("/dev/ttyUSB0", $aksi);
+        $respon = kirimPerintahArduino("PORT", $aksi); // Arahkan ke port arduino
         echo "hello".$respon;
     }
     
