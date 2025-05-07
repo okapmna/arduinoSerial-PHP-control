@@ -1,6 +1,5 @@
 # arduinoSerial-PHP-control
-Project ini dibuat untuk memenuhi UTS Microcontroller design
 
 
-Kontrol LED dengan Arduino melalui Serial
+Kontrol LED Arduino menggunakan serial melalui halaman Web local
 
