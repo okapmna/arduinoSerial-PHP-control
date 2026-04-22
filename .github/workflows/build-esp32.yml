@@ -27,7 +27,9 @@ jobs:
       - name: Compile Sketch
         run: |
           mkdir -p build
-          arduino-cli compile --fqbn esp32:esp32:esp32 --output-dir build serialread.ino
+          mkdir -p serialread
+          cp serialread.ino serialread/
+          arduino-cli compile --fqbn esp32:esp32:esp32 --output-dir build serialread/serialread.ino
 
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
