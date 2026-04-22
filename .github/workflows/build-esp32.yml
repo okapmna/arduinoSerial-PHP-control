@@ -21,14 +21,11 @@ jobs:
           arduino-cli core update-index --additional-urls https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
           arduino-cli core install esp32:esp32 --additional-urls https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
 
-      - name: Install Libraries
-        run: |
-          arduino-cli lib install "Adafruit AHTX0"
-          arduino-cli lib install "Adafruit BusIO"
-          arduino-cli lib install "Adafruit Unified Sensor"
-
       - name: Compile Sketch
         run: |
+          # Membuat folder build agar tidak error
+          mkdir -p build
+          # Kita arahkan langsung ke path file .ino
           arduino-cli compile --fqbn esp32:esp32:esp32 --output-dir ./build ./serialread.ino
 
       - name: Upload Binary Artifact
