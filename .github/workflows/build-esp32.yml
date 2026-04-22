@@ -1,0 +1,36 @@
+name: Compile and Export Binary
+
+on:
+  push:
+    branches:
+      - main  # Ganti jika nama branch utama kamu berbeda
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Compile Arduino Sketch
+        uses: arduino/compile-action@v2
+        with:
+          fqbn: "esp32:esp32:esp32" # Sesuai penggunaan ESP32 di README.md
+          platform-url: https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
+          sketch-paths: |
+            ./serialread.ino
+          libraries: |
+            - name: Adafruit AHTX0
+            - name: Adafruit BusIO
+            - name: Adafruit Unified Sensor
+          cli-compile-flags: |
+            --export-binaries
+
+      - name: Upload Binary Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: serialread-esp32-bin
+          path: |
+            ./build/**/*.bin
+            ./**/*.bin
