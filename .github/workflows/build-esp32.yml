@@ -1,35 +1,30 @@
-name: Compile and Export Binary
+name: Arduino Build
 
 on:
   push:
-    branches:
-      - main
+    paths:
+      - '**.ino'
+  pull_request:
+    paths:
+      - '**.ino'
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Setup Arduino CLI
-        uses: arduino/setup-arduino-cli@v1
+        uses: arduino/setup-arduino-cli@v2
 
-      - name: Install ESP32 Platform
+      - name: Install Platform Support
         run: |
-          arduino-cli core update-index --additional-urls https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
-          arduino-cli core install esp32:esp32 --additional-urls https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
+          arduino-cli core update-index
+          # Ganti esp32:esp32 jika Anda menggunakan board lain (misal arduino:avr)
+          arduino-cli core install esp32:esp32 
 
       - name: Compile Sketch
         run: |
-          # Membuat folder build agar tidak error
-          mkdir -p build
-          # Kita arahkan langsung ke path file .ino
-          arduino-cli compile --fqbn esp32:esp32:esp32 --output-dir ./build ./serialread.ino
-
-      - name: Upload Binary Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: serialread-esp32-bin
-          path: ./build/*.bin
+          arduino-cli compile --fqbn esp32:esp32:devkitv1 ./serialread.ino
