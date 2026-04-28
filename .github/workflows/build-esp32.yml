@@ -27,8 +27,11 @@ jobs:
       - name: Compile Sketch
         run: |
           mkdir -p build
+          # Pastikan file serialread.ino ada di root atau sesuaikan path-nya
           mkdir -p serialread
-          cp serialread.ino serialread/
+          if [ -f serialread.ino ]; then
+            cp serialread.ino serialread/
+          fi
           arduino-cli compile --fqbn esp32:esp32:esp32 --output-dir build serialread/serialread.ino
 
       - name: Upload Build Artifacts
@@ -36,3 +39,15 @@ jobs:
         with:
           name: serialread-esp32-bin
           path: build/*.bin
+
+      - name: Send .bin to API
+        env:
+          OTA_API_KEY: ${{ secrets.OTA_API_KEY }}
+        run: |
+          BIN_FILE=$(ls build/*.bin | head -n 1)
+          # Mengirim ke API dengan header x-api-key sesuai middleware auth.js
+          curl -X POST https://otaup.okamna.my.id/api/upload \
+               -F "firmware=@$BIN_FILE" \
+               -F "version=${{ github.sha }}" \
+               -F "device_type=esp32" \
+               -H "x-api-key: $OTA_API_KEY"
