@@ -3,7 +3,7 @@ int led2 = 19;
 int led3 = 12;
 int led4 = 13;
 
-// LedSet
+// LedSet status
 bool led1St = false;
 bool led2St = false;
 
